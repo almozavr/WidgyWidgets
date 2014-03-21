@@ -452,4 +452,25 @@ public class EditTextWithCustomError extends EditText {
 		//		invalidate();
 		//		requestLayout();
 	}
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Error state
+    ///////////////////////////////////////////////////////////////////////////
+
+    private static final int[] STATE_ERROR = {R.attr.state_error};
+    protected boolean errorState;
+
+    public void setErrorState(boolean errorState) {
+        this.errorState = errorState;
+        refreshDrawableState();
+    }
+
+    @Override
+    protected int[] onCreateDrawableState(int extraSpace) {
+        final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
+        if (errorState) {
+            mergeDrawableStates(drawableState, STATE_ERROR);
+        }
+        return drawableState;
+    }
 }
