@@ -9,6 +9,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -35,6 +36,9 @@ public class EditTextWithCustomError extends EditText {
 	Drawable mErrorBackgroundAbove;
 	Drawable mErrorBackground;
 	int mErrorTextColor;
+	int mErrorTextSize;
+    int mErrorAnchorHorizontalOffset;
+    int mErrorAnchorVerticalOffset;
 
 	public EditTextWithCustomError(Context context) {
 		super(context);
@@ -42,7 +46,7 @@ public class EditTextWithCustomError extends EditText {
 	}
 
 	public EditTextWithCustomError(Context context, AttributeSet attrs) {
-		super(context, attrs);
+		super(context, attrs, R.attr.editTextWithCustomErrorStyle);
 		init(context, attrs);
 	}
 
@@ -54,25 +58,35 @@ public class EditTextWithCustomError extends EditText {
 	private void init(Context context, AttributeSet attrs) {
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EditTextWithCustomError);
 
-		if (a.hasValue(R.styleable.EditTextWithCustomError_ErrorDefaultIcon)) {
-			mErrorIcon = a.getDrawable(R.styleable.EditTextWithCustomError_ErrorDefaultIcon);
-		}
-		if(mErrorIcon == null) {
-		}
-		if (a.hasValue(R.styleable.EditTextWithCustomError_ErrorDefaultBackground)) {
-			mErrorBackground = a.getDrawable(R.styleable.EditTextWithCustomError_ErrorDefaultBackground);
-		}
-		if(mErrorBackground == null) {
-		}
-		if (a.hasValue(R.styleable.EditTextWithCustomError_ErrorDefaultBackgroundAbove)) {
-			mErrorBackgroundAbove = a.getDrawable(R.styleable.EditTextWithCustomError_ErrorDefaultBackgroundAbove);
-		}
-		if(mErrorBackgroundAbove == null) {
-		}
-		if (a.hasValue(R.styleable.EditTextWithCustomError_ErrorTextColor)) {
-			mErrorTextColor = a.getColor(R.styleable.EditTextWithCustomError_ErrorTextColor, Color.rgb(50, 50, 50));
-		}
-	}
+        try {
+            if (a.hasValue(R.styleable.EditTextWithCustomError_errorDefaultIcon)) {
+                mErrorIcon = a.getDrawable(R.styleable.EditTextWithCustomError_errorDefaultIcon);
+            }
+            if (mErrorIcon == null) {
+            }
+            if (a.hasValue(R.styleable.EditTextWithCustomError_errorDefaultBackground)) {
+                mErrorBackground = a.getDrawable(R.styleable.EditTextWithCustomError_errorDefaultBackground);
+            }
+            if (mErrorBackground == null) {
+            }
+            if (a.hasValue(R.styleable.EditTextWithCustomError_errorDefaultBackgroundAbove)) {
+                mErrorBackgroundAbove = a.getDrawable(R.styleable.EditTextWithCustomError_errorDefaultBackgroundAbove);
+            }
+            if (mErrorBackgroundAbove == null) {
+            }
+            if (a.hasValue(R.styleable.EditTextWithCustomError_errorTextColor)) {
+                mErrorTextColor = a.getColor(R.styleable.EditTextWithCustomError_errorTextColor, Color.rgb(50, 50, 50));
+            }
+            if (a.hasValue(R.styleable.EditTextWithCustomError_errorTextSize)) {
+                mErrorTextSize = a.getDimensionPixelSize(R.styleable.EditTextWithCustomError_errorTextSize, 14);
+            }
+            mErrorAnchorHorizontalOffset = a.getInt(R.styleable.EditTextWithCustomError_errorAnchorHorizontalOffset, 25);
+            mErrorAnchorVerticalOffset = a.getInt(R.styleable.EditTextWithCustomError_errorAnchorVerticalOffset, 2);
+        } finally {
+            a.recycle();
+        }
+
+    }
 
 	/**
 	 * Sets the right-hand compound drawable of the TextView to the "error"
@@ -191,6 +205,7 @@ public class EditTextWithCustomError extends EditText {
 //			LayoutInflater inflater = LayoutInflater.from(getContext());
 			final TextView err = new TextView(getContext());
 			err.setTextColor(mErrorTextColor);
+            err.setTextSize(TypedValue.COMPLEX_UNIT_PX, mErrorTextSize);
 
 			final float scale = getResources().getDisplayMetrics().density;
 			mPopup = new ErrorPopup(err, (int) (200 * scale + 0.5f),
@@ -227,16 +242,12 @@ public class EditTextWithCustomError extends EditText {
 	 * at the middle of the error icon.
 	 */
 	private int getErrorX() {
-		/*
-		 * The "25" is the distance between the point and the right edge
-		 * of the background
-		 */
 		final float scale = getResources().getDisplayMetrics().density;
 
 		final Drawables dr = mDrawables;
 		return getWidth() - mPopup.getWidth()
 				- getPaddingRight()
-				- (dr != null ? dr.mDrawableSizeRight : 0) / 2 + (int) (25 * scale + 0.5f);
+				- (dr != null ? dr.mDrawableSizeRight : 0) / 2 + (int) (mErrorAnchorHorizontalOffset * scale + 0.5f);
 	}
 
 	/**
@@ -255,13 +266,8 @@ public class EditTextWithCustomError extends EditText {
 		int icontop = getCompoundPaddingTop()
 				+ (vspace - (dr != null ? dr.mDrawableHeightRight : 0)) / 2;
 
-		/*
-		 * The "2" is the distance between the point and the top edge
-		 * of the background.
-		 */
-
 		return icontop + (dr != null ? dr.mDrawableHeightRight : 0)
-				- getHeight() - 2;
+				- getHeight() - mErrorAnchorVerticalOffset;
 	}
 
 	private void chooseSize(PopupWindow pop, CharSequence text, TextView tv) {
@@ -452,4 +458,25 @@ public class EditTextWithCustomError extends EditText {
 		//		invalidate();
 		//		requestLayout();
 	}
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Error state
+    ///////////////////////////////////////////////////////////////////////////
+
+    private static final int[] STATE_ERROR = {R.attr.state_error};
+    protected boolean errorState;
+
+    public void setErrorState(boolean errorState) {
+        this.errorState = errorState;
+        refreshDrawableState();
+    }
+
+    @Override
+    protected int[] onCreateDrawableState(int extraSpace) {
+        final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
+        if (errorState) {
+            mergeDrawableStates(drawableState, STATE_ERROR);
+        }
+        return drawableState;
+    }
 }

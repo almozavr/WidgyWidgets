@@ -2,17 +2,35 @@
 <resources>
     <declare-styleable name="EditTextWithCustomError">
 
+        <!--Style theme reference-->
+        <attr name="editTextWithCustomErrorStyle" format="reference" />
+
         <!-- A default icon to show as a drawable Right -->
-        <attr name="ErrorDefaultIcon" format="reference|color" />
-        
+        <attr name="errorDefaultIcon" format="reference|color" />
+
         <!-- A drawable to use as the background of the Error when above -->
-        <attr name="ErrorDefaultBackgroundAbove" format="reference|color" />
-        
+        <attr name="errorDefaultBackgroundAbove" format="reference|color" />
+
         <!-- A drawable to use as the background of the Error when not above -->
-        <attr name="ErrorDefaultBackground" format="reference|color" />
-        
-		<!-- Text Color of the error message -->
-        <attr name="ErrorTextColor" format="reference|color" />
+        <attr name="errorDefaultBackground" format="reference|color" />
+
+        <!-- Text Color of the error message -->
+        <attr name="errorTextColor" format="reference|color" />
+
+        <!-- Text Size of the error message -->
+        <attr name="errorTextSize" format="dimension" />
+
+        <!-- Text Size of the error message -->
+        <attr name="errorTextPadding" format="dimension" />
+
+        <!-- Right/left offset for error background anchor-->
+        <attr name="errorAnchorHorizontalOffset" format="integer" />
+
+        <!-- Top/bottom offset for error background anchor-->
+        <attr name="errorAnchorVerticalOffset" format="integer" />
+
+        <!-- Error state for selector-->
+        <attr name="state_error" format="boolean" />
 
     </declare-styleable>
 
