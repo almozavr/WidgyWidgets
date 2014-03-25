@@ -10,6 +10,9 @@ import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -514,6 +517,47 @@ public class EditTextWithCustomError extends EditText {
 		//		invalidate();
 		//		requestLayout();
 	}
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Keyboard handling
+    ///////////////////////////////////////////////////////////////////////////
+
+
+    @Override
+    public void onEditorAction(int actionCode) {
+        super.onEditorAction(actionCode);
+        if (actionCode == EditorInfo.IME_ACTION_NEXT) {
+            if (mOnImeHidden != null) mOnImeHidden.onImeHidden(this, true);
+        } else if (actionCode == EditorInfo.IME_ACTION_PREVIOUS) {
+            if (mOnImeHidden != null) mOnImeHidden.onImeHidden(this, true);
+        } else if (actionCode == EditorInfo.IME_ACTION_DONE) {
+            if (mOnImeHidden != null) mOnImeHidden.onImeHidden(this, true);
+        }
+    }
+
+    @Override
+    public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+        if ((event.getKeyCode() == KeyEvent.KEYCODE_BACK)
+                && event.getAction() == KeyEvent.ACTION_UP) {
+            if (mOnImeHidden != null) mOnImeHidden.onImeHidden(this, true);
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    /**
+     * Défini le listener pour la gestion de la touche Back en mode clavier
+     * @param listener
+     */
+    public void setOnImeHiddenListener(ImeHiddenListener listener) {
+        mOnImeHidden = listener;
+    }
+
+    private ImeHiddenListener mOnImeHidden;
+
+    public interface ImeHiddenListener {
+
+        public void onImeHidden(View view, boolean isHidden);
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     // Error state
