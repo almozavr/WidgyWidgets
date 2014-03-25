@@ -88,7 +88,63 @@ public class EditTextWithCustomError extends EditText {
 
     }
 
-	/**
+    public Drawable getmErrorIcon() {
+        return mErrorIcon;
+    }
+
+    public void setmErrorIcon(Drawable mErrorIcon) {
+        this.mErrorIcon = mErrorIcon;
+    }
+
+    public Drawable getmErrorBackgroundAbove() {
+        return mErrorBackgroundAbove;
+    }
+
+    public void setmErrorBackgroundAbove(Drawable mErrorBackgroundAbove) {
+        this.mErrorBackgroundAbove = mErrorBackgroundAbove;
+    }
+
+    public Drawable getmErrorBackground() {
+        return mErrorBackground;
+    }
+
+    public void setmErrorBackground(Drawable mErrorBackground) {
+        this.mErrorBackground = mErrorBackground;
+    }
+
+    public int getmErrorTextColor() {
+        return mErrorTextColor;
+    }
+
+    public void setmErrorTextColor(int mErrorTextColor) {
+        this.mErrorTextColor = mErrorTextColor;
+    }
+
+    public int getmErrorTextSize() {
+        return mErrorTextSize;
+    }
+
+    public void setmErrorTextSize(int mErrorTextSize) {
+        this.mErrorTextSize = mErrorTextSize;
+    }
+
+    public int getmErrorAnchorHorizontalOffset() {
+        return mErrorAnchorHorizontalOffset;
+    }
+
+    public void setmErrorAnchorHorizontalOffset(int mErrorAnchorHorizontalOffset) {
+        this.mErrorAnchorHorizontalOffset = mErrorAnchorHorizontalOffset;
+    }
+
+    public int getmErrorAnchorVerticalOffset() {
+        return mErrorAnchorVerticalOffset;
+    }
+
+    public void setmErrorAnchorVerticalOffset(int mErrorAnchorVerticalOffset) {
+        this.mErrorAnchorVerticalOffset = mErrorAnchorVerticalOffset;
+    }
+
+    /**
 	 * Sets the right-hand compound drawable of the TextView to the "error"
 	 * icon and sets an error message that will be displayed in a popup when
 	 * the TextView has focus.  The icon and error message will be reset to
