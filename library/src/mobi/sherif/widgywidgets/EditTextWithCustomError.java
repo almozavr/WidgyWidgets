@@ -245,7 +245,7 @@ public class EditTextWithCustomError extends EditText {
 			hideError();
 		}
 	}
-	private void hideError() {
+	public void hideError() {
 		if (mPopup != null) {
 			if (mPopup.isShowing()) {
 				mPopup.dismiss();
@@ -254,7 +254,7 @@ public class EditTextWithCustomError extends EditText {
 
 		mShowErrorAfterAttach = false;
 	}
-	private void showError() {
+	public void showError() {
 		if (getWindowToken() == null) {
 			mShowErrorAfterAttach = true;
 			return;
